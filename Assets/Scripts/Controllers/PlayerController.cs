@@ -6,28 +6,58 @@ public class PlayerController : MonoBehaviour
 {
 	[SerializeField]
 	float _speed = 10.0f;
-    void Start()
+
+	Vector3 _destPos;
+	Vector3 _inputDir;
+
+	void Start()
     {
         GameManagers gm = GameManagers.GameManager;
     }
 
-    void Update()
-    {
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.position += Vector3.forward * Time.deltaTime * _speed;
-        }
+	void UpdateMoving()
+	{
+		_inputDir = Vector3.zero;
+
+		if (Input.GetKey(KeyCode.W))
+		{
+			_inputDir += Vector3.forward;
+		}
 		if (Input.GetKey(KeyCode.A))
 		{
-			transform.position += Vector3.left * Time.deltaTime * _speed;
+			_inputDir += Vector3.left;
 		}
 		if (Input.GetKey(KeyCode.S))
 		{
-			transform.position +=  Vector3.back* Time.deltaTime * _speed;
+			_inputDir += Vector3.back;
 		}
 		if (Input.GetKey(KeyCode.D))
 		{
-			transform.position += Vector3.right * Time.deltaTime *	_speed;
+			_inputDir += Vector3.right;
+		}
+
+		if (_inputDir != Vector3.zero)
+		{
+			_destPos = _inputDir.normalized;
+		}
+		else
+		{
+			_inputDir = Vector3.zero;
+		}
+
+		Vector3 dir = _destPos * _speed * Time.deltaTime;
+		transform.Translate(dir, Space.World);
+
+		if (_inputDir != Vector3.zero)
+		{
+			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_inputDir), 20 * Time.deltaTime);
+		}
+	}
+    void Update()
+    {
+		if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+		{
+			UpdateMoving();
 		}
 	}
 }
