@@ -12,10 +12,20 @@ public class PlayerController : MonoBehaviour
 
 	void Start()
     {
-        GameManagers gm = GameManagers.GameManager;
+		GameManagers.InputManager.KeyAction -= OnKeyboard;
+		GameManagers.InputManager.KeyAction += OnKeyboard;
     }
 
 	void UpdateMoving()
+	{
+		
+	}
+    void Update()
+    {
+
+	}
+
+	void OnKeyboard()
 	{
 		_inputDir = Vector3.zero;
 
@@ -42,7 +52,7 @@ public class PlayerController : MonoBehaviour
 		}
 		else
 		{
-			_inputDir = Vector3.zero;
+			_destPos = Vector3.zero;
 		}
 
 		Vector3 dir = _destPos * _speed * Time.deltaTime;
@@ -51,13 +61,6 @@ public class PlayerController : MonoBehaviour
 		if (_inputDir != Vector3.zero)
 		{
 			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_inputDir), 20 * Time.deltaTime);
-		}
-	}
-    void Update()
-    {
-		if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-		{
-			UpdateMoving();
 		}
 	}
 }

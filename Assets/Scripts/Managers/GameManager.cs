@@ -5,7 +5,10 @@ using UnityEngine;
 public class GameManagers : MonoBehaviour
 {
 	static GameManagers s_GameManager;
-	public static GameManagers GameManager { get { Init(); return s_GameManager; } }
+	static GameManagers GameManager { get { Init(); return s_GameManager; } }
+
+	InputManager _inputManager = new InputManager();
+	public static InputManager InputManager { get { return GameManager._inputManager; } }
 	void Start()
 	{
 		Init();
@@ -13,7 +16,7 @@ public class GameManagers : MonoBehaviour
 
 	void Update()
 	{
-		
+		_inputManager.OnUpdate();
 	}
 
 	static void Init()
